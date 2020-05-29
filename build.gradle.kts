@@ -2,7 +2,7 @@ plugins {
     id ("fabric-loom") version "0.2.7-SNAPSHOT"
 }
 
-version = properties["mod_version"] as String + "-mc1.14"
+version = properties["mod_version"] as String + "-mc1.15"
 group = properties["maven_group"] as String
 extra["archivesBaseName"] =  properties["archives_base_name"]
 
