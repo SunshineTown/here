@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 1,
+  "id": "here",
+  "version": "${version}",
+
+  "authors": [
+    "extclp"
+  ],
+  "entrypoints": {
+    "main": [
+      "com.extclp.here.fabric.HereMod"
+    ]
+  },
+  "mixins": [
+    "here.mixins.json"
+  ],
+  "depends": {
+    "fabric": "*"
+  }
+}
