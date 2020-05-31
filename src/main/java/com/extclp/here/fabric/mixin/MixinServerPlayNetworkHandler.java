@@ -23,7 +23,7 @@ public abstract class MixinServerPlayNetworkHandler {
             at = @At(value = "INVOKE",shift = At.Shift.AFTER,
                     target = "Lnet/minecraft/server/PlayerManager;broadcastChatMessage(Lnet/minecraft/text/Text;Z)V"))
     private void onChat(ChatMessageC2SPacket packet, CallbackInfo ci){
-        if(HereMod.getConfig().chat_events.contains(packet.getChatMessage())){
+        if(HereMod.config.chat_events.contains(packet.getChatMessage())){
             server.getCommandManager().execute(player.getCommandSource(), "/here");
         }
     }

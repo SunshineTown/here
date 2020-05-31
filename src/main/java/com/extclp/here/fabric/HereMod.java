@@ -1,5 +1,6 @@
 package com.extclp.here.fabric;
 
+import com.extclp.here.fabric.hooks.carpet.CarpetHook;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import net.fabricmc.api.ModInitializer;
@@ -13,11 +14,7 @@ import java.nio.file.Paths;
 
 public class HereMod implements ModInitializer {
 
-    private static HereConfig config;
-
-    public static HereConfig getConfig() {
-        return config;
-    }
+    public static HereConfig config;
 
     @Override
     public void onInitialize() {

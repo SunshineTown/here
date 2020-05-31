@@ -1,5 +1,6 @@
 package com.extclp.here.fabric;
 
+import com.extclp.here.fabric.hooks.carpet.CarpetHook;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
@@ -33,7 +34,7 @@ public class HereCommand {
 
     private static String getWorldDisplayName(ServerWorld world){
         int dimensionID = world.getDimension().getType().getRawId();
-        String displayName = HereMod.getConfig().dimensions_name.get(dimensionID);
+        String displayName = HereMod.config.dimensions_name.get(dimensionID);
         if(displayName != null){
             return displayName;
         }else {
@@ -45,7 +46,7 @@ public class HereCommand {
         ServerPlayerEntity player = source.getPlayer();
         BlockPos blockPos = player.getBlockPos();
         source.getMinecraftServer().getPlayerManager().broadcastChatMessage(
-                new TranslatableText(HereMod.getConfig().broadcast_message, player.getDisplayName(),
+                new TranslatableText(HereMod.config.broadcast_message, player.getDisplayName(),
                         getWorldDisplayName(source.getWorld()),
                         blockPos.getX(), blockPos.getY(), blockPos.getZ(),
                         player.getServerWorld().getDimension().getType().getRawId()
@@ -54,20 +55,20 @@ public class HereCommand {
     }
 
     private static int glowing(ServerPlayerEntity player) {
-        return glowing(player, HereMod.getConfig().glowing_time);
+        return glowing(player, HereMod.config.glowing_time);
     }
 
     private static int glowing(ServerPlayerEntity player, int glowing_time){
         if(glowing_time > 0){
             player.addStatusEffect(new StatusEffectInstance(StatusEffects.GLOWING, glowing_time * 20));
-            player.sendMessage(new TranslatableText(HereMod.getConfig().glowing_message, glowing_time));
+            player.sendMessage(new TranslatableText(HereMod.config.glowing_message, glowing_time));
         }
         return 1;
     }
 
     private static int clearGlowing(ServerPlayerEntity player){
         player.removeStatusEffect(StatusEffects.GLOWING);
-        player.sendMessage(new LiteralText(HereMod.getConfig().glowing_effect_removed_message));
+        player.sendMessage(new LiteralText(HereMod.config.glowing_effect_removed_message));
         return 1;
     }
 }

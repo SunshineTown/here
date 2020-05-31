@@ -4,7 +4,10 @@ plugins {
 
 version = properties["mod_version"] as String + "-mc1.15"
 group = properties["maven_group"] as String
-extra["archivesBaseName"] =  properties["archives_base_name"]
+
+base {
+    archivesBaseName = properties["archives_base_name"] as String
+}
 
 repositories {
     maven {
@@ -21,7 +24,7 @@ dependencies {
     modCompile("carpet:fabric-carpet:${properties["minecraft_version"]}-${properties["carpet_core_version"]}")
 }
 
-configure<JavaPluginConvention> {
+java {
     sourceCompatibility = JavaVersion.VERSION_1_8
     targetCompatibility = JavaVersion.VERSION_1_8
 }
