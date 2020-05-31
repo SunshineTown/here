@@ -1,0 +1,16 @@
+name: here
+version: ${project.version}
+main: com.extclp.here.bukkit.HerePlugin
+author: extclp
+api-version: 1.13
+
+commands:
+  here:
+    permission: here.use
+  glowing:
+    permission: glowing.use
+permissions:
+  here.use:
+    default: true
+  glowing.use:
+    default: true
