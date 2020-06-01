@@ -1,4 +1,4 @@
-package com.extclp.here.fabric;
+package com.extclp.here.forge;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;

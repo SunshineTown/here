@@ -1,0 +1,9 @@
+modLoader="javafml"
+loaderVersion="[31,)"
+
+[[mods]]
+modId="here"
+version="${file.jarVersion}"
+displayName="Here Mod"
+authors="extclp"
+description="here command mod"
