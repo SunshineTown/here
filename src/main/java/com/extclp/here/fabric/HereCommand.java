@@ -7,10 +7,10 @@ import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
+import net.minecraft.network.MessageType;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.LiteralText;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.math.BlockPos;
@@ -33,25 +33,35 @@ public class HereCommand {
         );
     }
 
-    private static String getWorldDisplayName(ServerWorld world){
-        int dimensionID = world.getDimension().getType().getRawId();
-        String displayName = HereMod.config.dimensions_name.get(dimensionID);
+    private static String getWorldDisplayName(ServerCommandSource source){
+        String worldNamespace = source.getWorld().getRegistryKey().getValue().toString();
+        String displayName = HereMod.config.worlds_name.get(worldNamespace);
         if(displayName != null){
             return displayName;
         }else {
-            return Integer.toString(dimensionID);
+            return worldNamespace;
         }
     }
+
+    private static int getDimensionID(ServerCommandSource source){
+        String dimensionNamespace = source.getWorld().getRegistryKey().getValue().toString();
+        Integer dimensionID = HereMod.config.dimensions_id.get(dimensionNamespace);
+        if(dimensionID != null){
+            return dimensionID;
+        }else {
+            return Integer.MAX_VALUE;
+        }
+    }
+
 
     private static int glowing(ServerCommandSource source) throws CommandSyntaxException {
         ServerPlayerEntity player = source.getPlayer();
         BlockPos blockPos = player.getBlockPos();
         source.getMinecraftServer().getPlayerManager().broadcastChatMessage(
                 Texts.of(HereMod.config.broadcast_message, player.getDisplayName(),
-                        getWorldDisplayName(source.getWorld()),
+                        getWorldDisplayName(source),
                         blockPos.getX(), blockPos.getY(), blockPos.getZ(),
-                        player.getServerWorld().getDimension().getType().getRawId()
-                ), true);
+                        getDimensionID(source)), MessageType.CHAT, player.getUuid());
         return glowing(player);
     }
 
@@ -62,14 +72,14 @@ public class HereCommand {
     private static int glowing(ServerPlayerEntity player, int glowing_time){
         if(glowing_time > 0){
             player.addStatusEffect(new StatusEffectInstance(StatusEffects.GLOWING, glowing_time * 20));
-            player.sendMessage(Texts.of(HereMod.config.glowing_message, glowing_time));
+            player.sendMessage(Texts.of(HereMod.config.glowing_message, glowing_time), false);
         }
         return 1;
     }
 
     private static int clearGlowing(ServerPlayerEntity player){
         player.removeStatusEffect(StatusEffects.GLOWING);
-        player.sendMessage(new LiteralText(HereMod.config.glowing_effect_removed_message).styled(style -> style.setColor(Formatting.DARK_GREEN)));
+        player.sendMessage(new LiteralText(HereMod.config.glowing_effect_removed_message).styled(style -> style.withColor(Formatting.DARK_GREEN)), false);
         return 1;
     }
 }

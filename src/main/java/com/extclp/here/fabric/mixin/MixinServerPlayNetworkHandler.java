@@ -19,9 +19,9 @@ public abstract class MixinServerPlayNetworkHandler {
 
     @Shadow @Final private MinecraftServer server;
 
-    @Inject(method = "onChatMessage",
+    @Inject(method = "onGameMessage",
             at = @At(value = "INVOKE",shift = At.Shift.AFTER,
-                    target = "Lnet/minecraft/server/PlayerManager;broadcastChatMessage(Lnet/minecraft/text/Text;Z)V"))
+                    target = "Lnet/minecraft/server/PlayerManager;broadcastChatMessage(Lnet/minecraft/text/Text;Lnet/minecraft/network/MessageType;Ljava/util/UUID;)V"))
     private void onChat(ChatMessageC2SPacket packet, CallbackInfo ci){
         if(HereMod.config.chat_events.contains(packet.getChatMessage())){
             server.getCommandManager().execute(player.getCommandSource(), "/here");

@@ -11,8 +11,11 @@ public class HereConfig {
 
     public List<String> chat_events =  Lists.newArrayList("!here", "!!here", "！here", "！！here");
 
-    public Map<Integer, String> dimensions_name = Maps.newHashMap(ImmutableMap.of(
-            0, "§2主世界", -1, "§c地狱", 1, "§d末地"));
+    public Map<String, String> worlds_name = Maps.newHashMap(ImmutableMap.of(
+            "minecraft:overworld", "§2主世界", "minecraft:the_nether", "§c地狱", "minecraft:the_end", "§d末地"));
+
+    public Map<String, Integer> dimensions_id = Maps.newHashMap(ImmutableMap.of(
+            "minecraft:overworld", 0, "minecraft:the_nether", -1, "minecraft:the_end", 1));
 
     public String broadcast_message = "%s §r在 %s §b[x:%s, y:%s, z:%s, dim:%s] §r向各位打招呼";
 
