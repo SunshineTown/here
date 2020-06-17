@@ -3,8 +3,10 @@ package com.extclp.here.fabric;
 import com.extclp.here.fabric.hooks.carpet.CarpetHook;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.mojang.brigadier.CommandDispatcher;
 import net.fabricmc.api.ModInitializer;
-import net.fabricmc.fabric.api.registry.CommandRegistry;
+import net.fabricmc.fabric.api.command.v1.CommandRegistrationCallback;
+import net.minecraft.server.command.ServerCommandSource;
 
 import java.io.Reader;
 import java.io.Writer;
@@ -19,9 +21,13 @@ public class HereMod implements ModInitializer {
     @Override
     public void onInitialize() {
         if (setupConfig()) {
-            CommandRegistry.INSTANCE.register(false, HereCommand::register);
+            CommandRegistrationCallback.EVENT.register(HereMod::registerCommand);
             CarpetHook.hookCarpet();
         }
+    }
+
+    private static void registerCommand(CommandDispatcher<ServerCommandSource> dispatcher, boolean dedicated) {
+        HereCommand.register(dispatcher);
     }
 
     private static boolean setupConfig() {
