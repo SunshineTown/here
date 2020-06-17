@@ -1,6 +1,7 @@
 package com.extclp.here.fabric;
 
 import com.extclp.here.fabric.hooks.carpet.CarpetHook;
+import com.extclp.here.fabric.utils.Texts;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
@@ -11,7 +12,7 @@ import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.LiteralText;
-import net.minecraft.text.TranslatableText;
+import net.minecraft.util.Formatting;
 import net.minecraft.util.math.BlockPos;
 
 public class HereCommand {
@@ -46,7 +47,7 @@ public class HereCommand {
         ServerPlayerEntity player = source.getPlayer();
         BlockPos blockPos = player.getBlockPos();
         source.getMinecraftServer().getPlayerManager().broadcastChatMessage(
-                new TranslatableText(HereMod.config.broadcast_message, player.getDisplayName(),
+                Texts.of(HereMod.config.broadcast_message, player.getDisplayName(),
                         getWorldDisplayName(source.getWorld()),
                         blockPos.getX(), blockPos.getY(), blockPos.getZ(),
                         player.getServerWorld().getDimension().getType().getRawId()
@@ -61,14 +62,14 @@ public class HereCommand {
     private static int glowing(ServerPlayerEntity player, int glowing_time){
         if(glowing_time > 0){
             player.addStatusEffect(new StatusEffectInstance(StatusEffects.GLOWING, glowing_time * 20));
-            player.sendMessage(new TranslatableText(HereMod.config.glowing_message, glowing_time));
+            player.sendMessage(Texts.of(HereMod.config.glowing_message, glowing_time));
         }
         return 1;
     }
 
     private static int clearGlowing(ServerPlayerEntity player){
         player.removeStatusEffect(StatusEffects.GLOWING);
-        player.sendMessage(new LiteralText(HereMod.config.glowing_effect_removed_message));
+        player.sendMessage(new LiteralText(HereMod.config.glowing_effect_removed_message).styled(style -> style.setColor(Formatting.DARK_GREEN)));
         return 1;
     }
 }

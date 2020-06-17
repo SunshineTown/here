@@ -15,6 +15,6 @@
     "here.mixins.json"
   ],
   "depends": {
-    "fabric": "*"
+    "fabric-command-api-v1": "*"
   }
 }
