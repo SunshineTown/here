@@ -1,6 +1,7 @@
 package com.extclp.here.fabric;
 
 import com.extclp.here.fabric.hooks.carpet.CarpetHook;
+import com.extclp.here.fabric.hooks.viaversion.ViaVersionHook;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.mojang.brigadier.CommandDispatcher;
@@ -23,6 +24,7 @@ public class HereMod implements ModInitializer {
         if (setupConfig()) {
             CommandRegistrationCallback.EVENT.register(HereMod::registerCommand);
             CarpetHook.hookCarpet();
+            ViaVersionHook.hookViaVersion();
         }
     }
 

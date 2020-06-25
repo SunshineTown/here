@@ -1,6 +1,7 @@
 package com.extclp.here.fabric;
 
 import com.extclp.here.fabric.hooks.carpet.CarpetHook;
+import com.extclp.here.fabric.hooks.viaversion.ViaVersionHook;
 import com.extclp.here.fabric.utils.Texts;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
@@ -12,7 +13,6 @@ import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.LiteralText;
-import net.minecraft.util.Formatting;
 import net.minecraft.util.math.BlockPos;
 
 public class HereCommand {
@@ -57,11 +57,21 @@ public class HereCommand {
     private static int glowing(ServerCommandSource source) throws CommandSyntaxException {
         ServerPlayerEntity player = source.getPlayer();
         BlockPos blockPos = player.getBlockPos();
-        source.getMinecraftServer().getPlayerManager().broadcastChatMessage(
-                Texts.of(HereMod.config.broadcast_message, player.getDisplayName(),
-                        getWorldDisplayName(source),
-                        blockPos.getX(), blockPos.getY(), blockPos.getZ(),
-                        getDimensionID(source)), MessageType.CHAT, player.getUuid());
+        LiteralText broadcastMessage = Texts.of(HereMod.config.broadcast_message, player.getDisplayName(),
+                getWorldDisplayName(source),
+                blockPos.getX(), blockPos.getY(), blockPos.getZ(),
+                player.getServerWorld().getRegistryKey().getValue().toString());
+        LiteralText broadcastMessage1_15Above = Texts.of(HereMod.config.broadcast_message, player.getDisplayName(),
+                getWorldDisplayName(source),
+                blockPos.getX(), blockPos.getY(), blockPos.getZ(),
+                getDimensionID(source));
+        for (ServerPlayerEntity playerEntity : source.getMinecraftServer().getPlayerManager().getPlayerList()) {
+            if(ViaVersionHook.is1_15AboveVersion(playerEntity)){
+                playerEntity.sendMessage(broadcastMessage, MessageType.CHAT, player.getUuid());
+            }else {
+                playerEntity.sendMessage(broadcastMessage1_15Above, MessageType.CHAT, player.getUuid());
+            }
+        }
         return glowing(player);
     }
 
@@ -79,7 +89,7 @@ public class HereCommand {
 
     private static int clearGlowing(ServerPlayerEntity player){
         player.removeStatusEffect(StatusEffects.GLOWING);
-        player.sendMessage(new LiteralText(HereMod.config.glowing_effect_removed_message).styled(style -> style.withColor(Formatting.DARK_GREEN)), false);
+        player.sendMessage(new LiteralText(HereMod.config.glowing_effect_removed_message), false);
         return 1;
     }
 }

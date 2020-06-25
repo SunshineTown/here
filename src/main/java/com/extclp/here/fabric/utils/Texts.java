@@ -5,41 +5,65 @@ import net.minecraft.text.Text;
 
 public class Texts {
 
+    static class TextBuilder{
+
+        private final LiteralText parent;
+
+        private String lastText;
+
+        public TextBuilder() {
+            parent = new LiteralText("");
+        }
+
+        public TextBuilder(LiteralText parent) {
+            this.parent = parent;
+        }
+
+        public void append(Object o){
+            if(o instanceof Text){
+                if(lastText != null){
+                    parent.append(lastText);
+                }
+                parent.append(((Text) o));
+            } else {
+                String str = o.toString();
+                if(!str.isEmpty()){
+                    if(lastText != null){
+                        lastText += o.toString();
+                    } else {
+                        lastText = o.toString();
+                    }
+                }
+            }
+        }
+
+        public LiteralText toText(){
+            if(lastText != null){
+                parent.append(lastText);
+                lastText = null;
+            }
+            return parent;
+        }
+    }
+
     public static LiteralText of(String str){
         return new LiteralText(str);
     }
 
     public static LiteralText of(String str, Object... args){
-        LiteralText parent = new LiteralText("");
-        int i = 0;String[] split = str.split("%s");
+        TextBuilder textBuilder = new TextBuilder();
+        int i = 0;
+        String[] split = str.split("%s");
         while (i < split.length) {
-            parent.append(split[i]);
+            textBuilder.append(split[i]);
             if(i < args.length){
-                Object arg = args[i];
-                if(arg instanceof Text){
-                    parent.append((Text) arg);
-                }else {
-                    parent.append(arg.toString());
-                }
-            } else {
-                StringBuilder builder = new StringBuilder();
-                while (++i < split.length) {
-                    builder.append("%s");
-                    builder.append(split[i]);
-                }
-                parent.append(builder.toString());
-                return parent;
+                textBuilder.append(args[i]);
             }
             i++;
         }
         for (; i < args.length; i++) {
-            Object arg = args[i - 1];
-            if(arg instanceof Text){
-                parent.append((Text) arg);
-            } else {
-                parent.append(arg.toString());
-            }
+            textBuilder.append(args[i - 1]);
         }
-        return parent;
+        return textBuilder.toText();
     }
 }

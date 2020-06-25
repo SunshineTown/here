@@ -23,5 +23,5 @@ public class HereConfig {
 
     public int glowing_time = 15;
 
-    public String glowing_effect_removed_message = "已移除你的高亮效果";
+    public String glowing_effect_removed_message = "§8已移除你的高亮效果";
 }

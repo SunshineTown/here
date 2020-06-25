@@ -1,8 +1,8 @@
 plugins {
-    id ("fabric-loom") version "0.4-SNAPSHOT"
+    id ("fabric-loom") version "0.4.28"
 }
 
-version = properties["mod_version"] as String + "-mc1.14"
+version = properties["mod_version"] as String + "-mc1.16"
 group = properties["maven_group"] as String
 
 base {
@@ -13,16 +13,20 @@ repositories {
     maven {
         url = uri("https://masa.dy.fi/maven")
     }
+    maven {
+        url = uri("https://repo.viaversion.com/")
+    }
 }
 
 dependencies {
     minecraft("com.mojang:minecraft:${properties["minecraft_version"]}")
     mappings("net.fabricmc:yarn:${properties["yarn_mappings"]}:v2")
     modCompile("net.fabricmc:fabric-loader:${properties["loader_version"]}")
-    modCompile("net.fabricmc.fabric-api:fabric-api-base:0.1.3+12a8474cb0")
-    modCompile(	"net.fabricmc.fabric-api:fabric-command-api-v1:1.0.7+f444f163b0")
 
-    modCompile("carpet:fabric-carpet:${properties["minecraft_version"]}-${properties["carpet_core_version"]}")
+    modCompile("net.fabricmc.fabric-api:fabric-api:${properties["fabric_version"]}")
+    modCompile("carpet:fabric-carpet:${properties["carpet_version"]}")
+    implementation("us.myles:viaversion:3.0.2-SNAPSHOT") { isTransitive = false }
+
 }
 
 java {
